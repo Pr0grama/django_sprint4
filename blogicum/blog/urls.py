@@ -1,30 +1,45 @@
-from django.contrib import admin
-from django.urls import path, include
-from django.conf import settings
-from django.conf.urls.static import static
-from django.conf.urls import handler403, handler404, handler500
-from blog import views as blog_views
-from django.contrib import admin
-from django.urls import path, include
-from django.contrib.auth.views import LogoutView
+﻿from django.urls import path
+from . import views
 
-handler403 = 'pages.views.csrf_failure'
-handler404 = 'pages.views.page_not_found'
-handler500 = 'pages.views.server_error'
 
+app_name = 'blog'
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('auth/logout/',
-        LogoutView.as_view(next_page='/', http_method_names=['get', 'post']),
-        name='logout'
-    ),
-    path('auth/logout/', LogoutView.as_view(), name='logout'),
-    path('auth/', include('django.contrib.auth.urls')),
-    path(
-        'auth/registration/',
-        blog_views.RegistrationView.as_view(),
-        name='registration'
-    ),
-    path('', include('blog.urls')),
-    path('pages/', include('pages.urls')),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path('', views.index, name='index'),
+    path('posts/<int:id>/', views.post_detail, name='post_detail'),
+    path('profile/<str:username>/edit/',
+         views.ProfileUpdateView.as_view(),
+         name='profile_edit'),
+    path('category/<slug:category_slug>/',
+         views.category_posts,
+         name='category_posts'),
+    path('profile/<str:username>/',
+         views.profile_view,
+         name='profile'),
+    path('posts/create/',
+         views.PostCreateView.as_view(),
+         name='create_post'),
+    path('posts/<int:post_id>/edit/',
+         views.PostUpdateView.as_view(),
+         name='edit_post'),
+    path('posts/<int:post_id>/delete/',
+         views.PostDeleteView.as_view(),
+         name='delete_post'),
+    path('profile/edit/',
+         views.ProfileUpdateView.as_view(),
+         name='edit_profile'),
+    path('posts/<int:post_id>/comment/',
+         views.add_comment,
+         name='add_comment'),
+    path('posts/<int:post_id>/edit_comment/<int:comment_id>/',
+         views.CommentUpdateView.as_view(),
+         name='edit_comment'),
+    path('posts/<int:post_id>/delete_comment/<int:comment_id>/',
+         views.delete_comment,
+         name='delete_comment'),
+    path('posts/<int:post_id>/comment/<int:comment_id>/edit/',
+         views.CommentUpdateView.as_view(),
+         name='edit_comment'),
+    path('posts/<int:post_id>/comment/<int:comment_id>/delete/',
+         views.CommentDeleteView.as_view(),
+         name='delete_comment'),
+]

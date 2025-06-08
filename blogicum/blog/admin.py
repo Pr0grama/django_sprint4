@@ -1,8 +1,4 @@
 ﻿from django.contrib import admin
-from .models import Category, Location, Post
-
-
-from django.contrib import admin
 from .models import Category, Location, Post, Comment
 
 
@@ -32,4 +28,4 @@ class PostAdmin(admin.ModelAdmin):
 class CommentAdmin(admin.ModelAdmin):
     list_display = ('text', 'post', 'author', 'created_at')
     search_fields = ('text', 'author__username', 'post__title')
-    list_filter = ('created_at', )
+    list_filter = ('created_at',)

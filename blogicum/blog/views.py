@@ -146,6 +146,7 @@ class PostDeleteView(LoginRequiredMixin, DeleteView):
         print(f"Удаление поста {self.get_object().id}")
         return super().delete(request, *args, **kwargs)
 
+
 class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     form_class = ProfileEditForm
     template_name = 'blog/profile_edit.html'
